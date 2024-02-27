@@ -1,0 +1,24 @@
+/Users/prasad.surase/udemy/go-complete-bootcamp/section-01
+	exercises
+/Users/prasad.surase/udemy/go-complete-bootcamp/section-05/exercises/
+	01-declare-nil
+	02-empty-slice
+	03-assign-slice-literal
+	04-array-as-slices
+	05-fix-problems
+	06-compare-slices
+	07-append-and-compate-byte-slices
+	08-append-to-nil-slice
+	09-fix-the-problems
+	10-append-and-sort
+	11-housing-prices
+	12-housing-prices-and-avg
+	13-slice-the-numbers
+	14-slicing-by-arguments
+	15-slicing-housing-prices
+	16-fix-backing-array-issue
+	17-sort-backing-array
+	18-observe-memory-allocation
+	19-observe-capacity-growth
+	20-observe-length-and-capacity
+	21-correct-the-lyric
