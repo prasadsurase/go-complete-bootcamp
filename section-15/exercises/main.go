@@ -8,27 +8,38 @@ import (
 
 type money float64
 
+type product struct {
+	title string
+	price money
+}
+
+func (p *product) print() {
+	fmt.Printf("%-15s: %s\n", p.title, p.price.string())
+}
+
+func (p *product) discount(ratio float64) {
+	p.price *= money(1 - ratio)
+}
+
 type book struct {
-	title       string
-	price       money
+	product
 	publishedAt interface{}
 }
 
 type game struct {
-	title string
-	price money
+	product
 }
 
 type puzzle struct {
-	title string
-	price money
+	product
 }
 
-type printer interface {
+type item interface {
 	print()
+	discount(float64)
 }
 
-type list []printer
+type list []item
 
 func (m money) string() string {
 	return fmt.Sprintf("$%.2f", float64(m))
@@ -39,22 +50,6 @@ func (b *book) print() {
 }
 
 func formatDate(data interface{}) string {
-	// if data == nil {
-	// 	return "unknown"
-	// }
-	// if data, ok := data.(int); ok {
-	// 	var t int
-	// 	t = data
-	// 	u := time.Unix(int64(t), 0)
-	// 	return u.String()
-	// }
-
-	// if data, ok := data.(string); ok {
-	// 	var t int
-	// 	t, _ = strconv.Atoi(data)
-	// 	u := time.Unix(int64(t), 0)
-	// 	return u.String()
-	// }
 	var t int
 
 	switch e := data.(type) {
@@ -68,22 +63,6 @@ func formatDate(data interface{}) string {
 
 	u := time.Unix(int64(t), 0)
 	return u.String()
-}
-
-func (g *game) print() {
-	fmt.Printf("%-15s: %s\n", g.title, g.price.string())
-}
-
-func (p *puzzle) print() {
-	fmt.Printf("%-15s: %s\n", p.title, p.price.string())
-}
-
-func (g *game) discount(ratio float64) {
-	g.price *= money(1 - ratio)
-}
-
-func (b *book) discount(ratio float64) {
-	b.price *= money(1 - ratio)
 }
 
 func (l list) print() {
@@ -113,12 +92,12 @@ func (l list) discount(ratio float64) {
 
 func main() {
 	var (
-		mobydick       = book{title: "moby dick", price: 10, publishedAt: 1712755836}
-		treasureIsland = book{title: "treasure island", price: 25, publishedAt: "1711891860"}
-		oliverTwist    = book{title: "oliver twist", price: 15}
-		minecraft      = game{title: "minecraft", price: 20}
-		tetris         = game{title: "tetris", price: 5}
-		rubik          = puzzle{title: "rubik's cube", price: 5}
+		mobydick       = book{product: product{title: "moby dick", price: 10}, publishedAt: 1712755836}
+		treasureIsland = book{product: product{title: "treasure island", price: 25}, publishedAt: "1711891860"}
+		oliverTwist    = book{product: product{title: "oliver twist", price: 15}, publishedAt: nil}
+		minecraft      = game{product{title: "minecraft", price: 20}}
+		tetris         = game{product{title: "tetris", price: 5}}
+		rubik          = puzzle{product{title: "rubik's cube", price: 5}}
 	)
 
 	var store list
