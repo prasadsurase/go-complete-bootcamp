@@ -1,12 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"time"
+)
 
 type money float64
 
 type book struct {
-	title string
-	price money
+	title       string
+	price       money
+	publishedAt interface{}
 }
 
 type game struct {
@@ -21,7 +26,6 @@ type puzzle struct {
 
 type printer interface {
 	print()
-	// discount(float64)
 }
 
 type list []printer
@@ -31,7 +35,39 @@ func (m money) string() string {
 }
 
 func (b *book) print() {
-	fmt.Printf("%-15s: %s\n", b.title, b.price.string())
+	fmt.Printf("%-15s: %s - (%v)\n", b.title, b.price.string(), formatDate(b.publishedAt))
+}
+
+func formatDate(data interface{}) string {
+	// if data == nil {
+	// 	return "unknown"
+	// }
+	// if data, ok := data.(int); ok {
+	// 	var t int
+	// 	t = data
+	// 	u := time.Unix(int64(t), 0)
+	// 	return u.String()
+	// }
+
+	// if data, ok := data.(string); ok {
+	// 	var t int
+	// 	t, _ = strconv.Atoi(data)
+	// 	u := time.Unix(int64(t), 0)
+	// 	return u.String()
+	// }
+	var t int
+
+	switch e := data.(type) {
+	case int:
+		t = e
+	case string:
+		t, _ = strconv.Atoi(e)
+	default:
+		return "unknown"
+	}
+
+	u := time.Unix(int64(t), 0)
+	return u.String()
 }
 
 func (g *game) print() {
@@ -77,15 +113,17 @@ func (l list) discount(ratio float64) {
 
 func main() {
 	var (
-		mobydick  = book{title: "moby dick", price: 10}
-		minecraft = game{title: "minecraft", price: 20}
-		tetris    = game{title: "tetris", price: 5}
-		rubik     = puzzle{title: "rubik's cube", price: 5}
+		mobydick       = book{title: "moby dick", price: 10, publishedAt: 1712755836}
+		treasureIsland = book{title: "treasure island", price: 25, publishedAt: "1711891860"}
+		oliverTwist    = book{title: "oliver twist", price: 15}
+		minecraft      = game{title: "minecraft", price: 20}
+		tetris         = game{title: "tetris", price: 5}
+		rubik          = puzzle{title: "rubik's cube", price: 5}
 	)
 
 	var store list
-	store = append(store, &minecraft, &tetris, &mobydick, &rubik)
-	store.print()
+	store = append(store, &minecraft, &tetris, &mobydick, &rubik, &treasureIsland, &oliverTwist)
+	// store.print()
 	store.discount(0.5)
 	store.print()
 }
